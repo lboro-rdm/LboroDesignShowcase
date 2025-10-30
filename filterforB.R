@@ -3,8 +3,8 @@ library(jsonlite)
 
 # ---- PARAMETERS ----
 input_file <- "20251029.csv"     # path to your input CSV
-output_file <- "filtered.csv" # path for output
-keywords_file <- "unique_keywords.csv"
+output_file <- "1023.csv" # path for output
+keywords_file <- paste0("unique_keywords_", Sys.Date(), ".csv")
 target_id <- 3426125
 
 # ---- PROCESS ----
