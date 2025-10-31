@@ -2,8 +2,9 @@ library(tidyverse)
 library(jsonlite)
 
 # ---- PARAMETERS ----
-input_file <- "20251030_1203.csv"     # path to your input CSV
-output_file <- "1203.csv" # path for output
+input_file <- "20251031.csv"     # path to your input CSV
+output_public <- "1288_public.csv" # path for output
+output_draft <- "78_private.csv"
 keywords_file <- paste0("unique_keywords_", Sys.Date(), ".csv")
 target_id <- 3426125
 
@@ -11,8 +12,13 @@ target_id <- 3426125
 df <- read.csv(input_file) %>%
   filter(account_id == target_id)
 
+# ---- SPLIT BY STATUS ----
+df_public <- df %>% filter(status == "public")
+df_draft  <- df %>% filter(status == "draft")
+
 # ---- OUTPUT ----
-write.csv(df, output_file, row.names = FALSE)
+write.csv(df_public, output_public, row.names = FALSE)
+write.csv(df_draft, output_draft, row.names = FALSE)
 
 all_keywords <- df %>%
   mutate(
