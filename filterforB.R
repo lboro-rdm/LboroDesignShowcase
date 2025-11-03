@@ -34,3 +34,14 @@ all_keywords <- df %>%
   sort()
 
 write_csv(tibble(keyword = all_keywords), keywords_file)
+
+### WRITE TO JSON FOR SHINY ###
+
+dir.create("data", showWarnings = FALSE)
+
+# Example: keep only what you need
+df_subset <- df_public %>%
+  select(article_id, title, authors, description, doi, keywords, publication_date)
+
+# Write to JSON (pretty formatting helps with version control diffs)
+write_json(df_subset, "data/articles.json", pretty = TRUE, auto_unbox = TRUE)
