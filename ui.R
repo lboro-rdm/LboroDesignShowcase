@@ -1,7 +1,7 @@
 library(shiny)
 
 ui <- fluidPage(
-  titlePanel("Articles Explorer"),
+  titlePanel("Design Showcase Explorer"),
   
   sidebarPanel(
     selectInput("year", "Select Year:", choices = NULL),
