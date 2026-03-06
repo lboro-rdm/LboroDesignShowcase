@@ -4,6 +4,8 @@ library(tidyverse)
 
 server <- function(input, output, session) {
   
+  taxonomy <- fromJSON("gptTaxonomy.json")
+  
   # ---- Load and clean data ----
   articles <- reactive({
     df <- fromJSON("data/articles.json", flatten = TRUE)
@@ -47,41 +49,93 @@ server <- function(input, output, session) {
     df <- articles()
     
     years <- sort(unique(df$year), decreasing = TRUE)
-    keywords <- sort(unique(unlist(df$keywords)))
     authors_list <- sort(unique(df$author))
     
     updateSelectInput(session, "year",
                       choices = c("All", years),
                       selected = "All")
     
-    updateSelectInput(session, "keyword",
-                      choices = c("All", keywords),
-                      selected = "All")
-    
     updateSelectInput(session, "author_filter",
                       choices = c("All", authors_list),
+                      selected = "All")
+    
+    # Facet dropdowns
+    updateSelectInput(session, "facet_geo",
+                      choices = c("All", taxonomy$geography_places),
+                      selected = "All")
+    
+    updateSelectInput(session, "facet_nature",
+                      choices = c("All", taxonomy$landscapes_nature),
+                      selected = "All")
+    
+    updateSelectInput(session, "facet_animals",
+                      choices = c("All", taxonomy$animals_insects),
+                      selected = "All")
+    
+    updateSelectInput(session, "facet_art",
+                      choices = c("All", taxonomy$art_movements_styles),
+                      selected = "All")
+    
+    updateSelectInput(session, "facet_design",
+                      choices = c("All", taxonomy$design_elements_patterns),
+                      selected = "All")
+    
+    updateSelectInput(session, "facet_architecture",
+                      choices = c("All", taxonomy$architecture_built_environment),
+                      selected = "All")
+    
+    updateSelectInput(session, "facet_fashion",
+                      choices = c("All", taxonomy$fashion_textiles),
                       selected = "All")
   })
   
   # ---- Filter reactive ----
   filtered <- reactive({
+    
     df <- articles()
     
     if (input$year != "All") {
       df <- df %>% filter(year == input$year)
     }
     
-    if (input$keyword != "All") {
-      df <- df %>% filter(map_lgl(keywords, ~ input$keyword %in% .x))
-    }
-    
     if (input$author_filter != "All") {
       df <- df %>% filter(author == input$author_filter)
     }
     
-    df <- df %>% arrange(title)
+    # helper function
+    keyword_filter <- function(data, keyword) {
+      data %>% filter(map_lgl(keywords, ~ keyword %in% .x))
+    }
     
-    df
+    if (input$facet_geo != "All") {
+      df <- keyword_filter(df, input$facet_geo)
+    }
+    
+    if (input$facet_nature != "All") {
+      df <- keyword_filter(df, input$facet_nature)
+    }
+    
+    if (input$facet_animals != "All") {
+      df <- keyword_filter(df, input$facet_animals)
+    }
+    
+    if (input$facet_art != "All") {
+      df <- keyword_filter(df, input$facet_art)
+    }
+    
+    if (input$facet_design != "All") {
+      df <- keyword_filter(df, input$facet_design)
+    }
+    
+    if (input$facet_architecture != "All") {
+      df <- keyword_filter(df, input$facet_architecture)
+    }
+    
+    if (input$facet_fashion != "All") {
+      df <- keyword_filter(df, input$facet_fashion)
+    }
+    
+    df %>% arrange(title)
   })
   
   # ---- Display titles in a grid ----

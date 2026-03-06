@@ -1,0 +1,239 @@
+{
+  "geography_places": [
+    "Africa",
+    "Amazon Rainforest",
+    "Athens, Greece",
+    "Birmingham, East Midlands",
+    "Cornwall",
+    "France",
+    "Hong Kong",
+    "India",
+    "Italy",
+    "Japan",
+    "Lake District",
+    "Leicester",
+    "London",
+    "Loughborough",
+    "Mexico",
+    "Morocco",
+    "New York",
+    "North Wales",
+    "Scotland",
+    "Spain",
+    "Taiwanese Culture",
+    "Thailand",
+    "United Kingdom",
+    "Wales",
+    "Yorkshire"
+  ],
+
+  "landscapes_nature": [
+    "Alaskan Landscapes",
+    "Alpine",
+    "Biodiversity",
+    "Botanical",
+    "British Gardens",
+    "Coastal",
+    "Coral Reef",
+    "Forest",
+    "Flora",
+    "Flowers",
+    "Foliage",
+    "Fungi",
+    "Landscape",
+    "Marine Life",
+    "Nature",
+    "Ocean",
+    "Pebbles",
+    "River",
+    "Rocks & Crystals",
+    "Sea",
+    "Seaside",
+    "Wildlife"
+  ],
+
+  "animals_insects": [
+    "Animals",
+    "Bees",
+    "Beetles",
+    "Birds",
+    "Butterflies",
+    "Golden Mole",
+    "Insects",
+    "JellyFish",
+    "Reptiles",
+    "Snake",
+    "Wild Animals"
+  ],
+
+  "art_movements_styles": [
+    "Abstract",
+    "Abstract Expressionism",
+    "Art Deco Movement",
+    "Art Nouveau",
+    "Contemporary Art",
+    "Fauvism",
+    "Impressionist",
+    "Minimalist",
+    "Modern Art",
+    "Surrealism",
+    "Surrealist"
+  ],
+
+  "design_elements_patterns": [
+    "Abstract Patterns",
+    "Bold Lines",
+    "Checkered",
+    "Geometric",
+    "Geometric Shapes",
+    "Grids & Pattern",
+    "Lines",
+    "Lines & Patterns",
+    "Ordered Geometry",
+    "Repeated Motif",
+    "Repeated Motifs",
+    "Stripes",
+    "Surface Pattern",
+    "Textures & Pattern"
+  ],
+
+  "architecture_built_environment": [
+    "Architecture",
+    "Architectural Structures",
+    "Brutalist",
+    "Church Architecture",
+    "Contemporary Architecture",
+    "Geometric Architecture",
+    "Historic British Building",
+    "Industrial Architecture",
+    "Modern Architecture",
+    "Religious Buildings",
+    "Urban Landscape",
+    "Urban Landscapes",
+    "Urbanism"
+  ],
+
+  "fashion_textiles": [
+    "Accessories",
+    "Fashion Collection",
+    "Fashion Textile",
+    "High-end Fashion",
+    "Luxury Fashion Collection",
+    "Menswear",
+    "Outerwear Collection",
+    "Scarf Collection",
+    "Sportswear",
+    "StreetWear & Outdoor Wear",
+    "Textile Art",
+    "Textile Jewellery",
+    "Textile Print",
+    "Unisex Fashion Collection",
+    "Womenswear"
+  ],
+
+  "interiors_products": [
+    "Cabinet Collection",
+    "Interior",
+    "Interior Collection",
+    "Interior Space",
+    "Interior Application",
+    "Interior Print Collecion",
+    "Interior Café Space",
+    "Lifestyle Interior",
+    "Nursery & Playroom Interior",
+    "Public Interiors",
+    "Wallpaper",
+    "Wall Paper & Fabrics"
+  ],
+
+  "materials_processes": [
+    "Biomaterials",
+    "Biomimicry",
+    "Bioplasticity",
+    "Circularity",
+    "Craftsmanship",
+    "Hand-crafted",
+    "Innovative Materials",
+    "Material Circularity",
+    "Recycled Materials",
+    "Repair",
+    "Sustainability",
+    "Upcycling"
+  ],
+
+  "culture_heritage": [
+    "British Heritage",
+    "Cultural Heritage",
+    "Cultural Identity",
+    "Family Heritage",
+    "Heritage",
+    "Heritage Craft",
+    "Mexican Heritage",
+    "Scandinavian Culture",
+    "Scottish Heritage",
+    "Traditional Polish Heritage"
+  ],
+
+  "history_time_periods": [
+    "18th Century",
+    "Victorian Era",
+    "Victorian Era, England",
+    "The Roaring 20’s",
+    "German Occupation",
+    "Interwar, Berlin",
+    "European Renaissance"
+  ],
+
+  "psychology_emotions": [
+    "Anguish",
+    "Anxiety",
+    "Belonging",
+    "Calmness",
+    "Emotion",
+    "Emotional Connection",
+    "Happiness",
+    "Healing",
+    "Identity",
+    "Introspection",
+    "Mental Health",
+    "Mental Wellbeing",
+    "Nostalgia",
+    "Serenity",
+    "Tranquility"
+  ],
+
+  "social_issues": [
+    "Climate Change",
+    "Community",
+    "Disabilities",
+    "Disability Visibility",
+    "Feminism",
+    "Inclusive",
+    "Inclusivity",
+    "Neurodiversity",
+    "Pollution",
+    "Societal Change",
+    "Societal Norms"
+  ],
+
+  "futurism_speculative": [
+    "Digital Dystopia",
+    "Digital Society",
+    "Futurism",
+    "Futuristic",
+    "Hypothetical Future",
+    "Science Fiction",
+    "Soteria 2050/Salvation",
+    "Utopian & Dystopian"
+  ],
+
+  "sensory_experience": [
+    "Multi-Sensory",
+    "Sensory",
+    "Tactile",
+    "Tactile Pieces",
+    "Tactile Surfaces",
+    "Visual Perceptions",
+    "Synaesthesia/Hidden Sense"
+  ]
+}
