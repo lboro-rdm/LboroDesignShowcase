@@ -1,6 +1,7 @@
 library(shiny)
 library(jsonlite)
 library(tidyverse)
+library(r2d3)
 
 server <- function(input, output, session) {
   
@@ -136,6 +137,54 @@ server <- function(input, output, session) {
     }
     
     df %>% arrange(title)
+  })
+  
+
+# r2d3 taxonomy bubbles ---------------------------------------------------
+
+  
+  
+  output$taxonomy_bubbles <- renderD3({
+    
+    taxonomy   <- fromJSON("gptTaxonomy.json")
+    df_filtered <- filtered()   # reactive: already-filtered article data frame
+    
+    # Map each taxonomy key to its corresponding Shiny facet input
+    facet_inputs <- list(
+      geography_places               = input$facet_geo,
+      landscapes_nature              = input$facet_nature,
+      animals_insects                = input$facet_animals,
+      art_movements_styles           = input$facet_art,
+      design_elements_patterns       = input$facet_design,
+      architecture_built_environment = input$facet_architecture,
+      fashion_textiles               = input$facet_fashion
+    )
+    
+    # For each taxonomy category, count how many FILTERED articles
+    # have at least one keyword belonging to that category
+    bubble_data <- imap_dfr(taxonomy, function(terms, key) {
+      
+      # Count articles where any keyword matches a term in this category
+      n_articles <- df_filtered %>%
+        filter(map_lgl(keywords, ~ any(.x %in% terms))) %>%
+        nrow()
+      
+      tibble(
+        label         = key,
+        count         = length(terms),          # number of taxonomy terms
+        article_count = n_articles,             # dynamic: filtered article count
+        category      = key,
+        selected      = !is.null(facet_inputs[[key]]) &&
+          facet_inputs[[key]] != "All",
+        first_term    = if (length(terms) > 0) terms[[1]] else "All"
+      )
+    })
+    
+    r2d3(
+      data       = bubble_data,
+      script     = file.path(getwd(), "taxonomy_bubbles.js"),
+      d3_version = 6
+    )
   })
   
   # ---- Display titles in a grid ----

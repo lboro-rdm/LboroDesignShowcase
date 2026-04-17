@@ -1,4 +1,5 @@
 library(shiny)
+library(r2d3)
 
 ui <- fluidPage(
   titlePanel("Design Showcase Explorer"),
@@ -16,6 +17,7 @@ ui <- fluidPage(
   ),
     
     mainPanel(
+      d3Output("taxonomy_bubbles", height = "520px"),
       uiOutput("article_grid") 
     )
   )
