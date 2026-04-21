@@ -144,41 +144,129 @@ server <- function(input, output, session) {
 
   
   
-  output$taxonomy_bubbles <- renderD3({
+  # ── Drill-down state ──────────────────────────────────────────
+  drilldown_category <- reactiveVal(NULL)   # NULL = show L1 overview
+  
+  # Handle L1 bubble click → drill down, or "__back__" → return to L1
+  observeEvent(input$bubble_drilldown, {
+    val <- input$bubble_drilldown
+    if (val == "__back__") {
+      drilldown_category(NULL)
+      
+      # Reset all facet dropdowns
+      updateSelectInput(session, "facet_geo",          selected = "All")
+      updateSelectInput(session, "facet_nature",        selected = "All")
+      updateSelectInput(session, "facet_animals",       selected = "All")
+      updateSelectInput(session, "facet_art",           selected = "All")
+      updateSelectInput(session, "facet_design",        selected = "All")
+      updateSelectInput(session, "facet_architecture",  selected = "All")
+      updateSelectInput(session, "facet_fashion",       selected = "All")
+      # Add any additional facet inputs here if you expand them later
+      
+      } else {
+      drilldown_category(val)
+    }
+  })
+  
+  # Handle L2 bubble click → update the matching facet selectInput
+  # Maps taxonomy JSON keys → Shiny selectInput IDs
+  observeEvent(input$bubble_term_click, {
+    click <- input$bubble_term_click
     
-    taxonomy   <- fromJSON("gptTaxonomy.json")
-    df_filtered <- filtered()   # reactive: already-filtered article data frame
-    
-    # Map each taxonomy key to its corresponding Shiny facet input
-    facet_inputs <- list(
-      geography_places               = input$facet_geo,
-      landscapes_nature              = input$facet_nature,
-      animals_insects                = input$facet_animals,
-      art_movements_styles           = input$facet_art,
-      design_elements_patterns       = input$facet_design,
-      architecture_built_environment = input$facet_architecture,
-      fashion_textiles               = input$facet_fashion
+    facet_map <- list(
+      geography_places               = "facet_geo",
+      landscapes_nature              = "facet_nature",
+      animals_insects                = "facet_animals",
+      art_movements_styles           = "facet_art",
+      design_elements_patterns       = "facet_design",
+      architecture_built_environment = "facet_architecture",
+      fashion_textiles               = "facet_fashion",
+      interiors_products             = "facet_interiors",    # add if you have this input
+      materials_processes            = "facet_materials",    # add if you have this input
+      culture_heritage               = "facet_culture",      # add if you have this input
+      history_time_periods           = "facet_history",      # add if you have this input
+      psychology_emotions            = "facet_psychology",   # add if you have this input
+      social_issues                  = "facet_social",       # add if you have this input
+      futurism_speculative           = "facet_futurism",     # add if you have this input
+      sensory_experience             = "facet_sensory"       # add if you have this input
     )
     
-    # For each taxonomy category, count how many FILTERED articles
-    # have at least one keyword belonging to that category
-    bubble_data <- imap_dfr(taxonomy, function(terms, key) {
+    input_id <- facet_map[[click$category]]
+    if (!is.null(input_id)) {
+      # Toggle: if already selected reset to "All", otherwise apply the term
+      new_val <- if (isTRUE(click$selected)) "All" else click$term
+      updateSelectInput(session, input_id, selected = new_val)
+    }
+  })
+  
+  # ── Bubble diagram output ─────────────────────────────────────
+  output$taxonomy_bubbles <- renderD3({
+    
+    taxonomy    <- fromJSON("gptTaxonomy.json")
+    df_filtered <- filtered()           # your existing filtered() reactive
+    active_cat  <- drilldown_category() # NULL or a category key string
+    
+    if (is.null(active_cat)) {
+      # ── Level 1: one bubble per top-level category ────────────
+      bubble_data <- imap_dfr(taxonomy, function(terms, key) {
+        n_articles <- df_filtered %>%
+          filter(map_lgl(keywords, ~ any(.x %in% terms))) %>%
+          nrow()
+        
+        tibble(
+          level         = 1L,
+          label         = key,
+          display_label = key %>%
+            str_replace_all("_", " ") %>%
+            str_to_title(),
+          article_count = n_articles,
+          category      = key,
+          parent        = NA_character_,
+          selected      = FALSE
+        )
+      })
       
-      # Count articles where any keyword matches a term in this category
-      n_articles <- df_filtered %>%
-        filter(map_lgl(keywords, ~ any(.x %in% terms))) %>%
-        nrow()
+    } else {
+      # ── Level 2: one bubble per term within the clicked category
+      terms <- taxonomy[[active_cat]]
       
-      tibble(
-        label         = key,
-        count         = length(terms),          # number of taxonomy terms
-        article_count = n_articles,             # dynamic: filtered article count
-        category      = key,
-        selected      = !is.null(facet_inputs[[key]]) &&
-          facet_inputs[[key]] != "All",
-        first_term    = if (length(terms) > 0) terms[[1]] else "All"
+      # Which facet input corresponds to this category?
+      facet_map <- list(
+        geography_places               = "facet_geo",
+        landscapes_nature              = "facet_nature",
+        animals_insects                = "facet_animals",
+        art_movements_styles           = "facet_art",
+        design_elements_patterns       = "facet_design",
+        architecture_built_environment = "facet_architecture",
+        fashion_textiles               = "facet_fashion",
+        interiors_products             = "facet_interiors",
+        materials_processes            = "facet_materials",
+        culture_heritage               = "facet_culture",
+        history_time_periods           = "facet_history",
+        psychology_emotions            = "facet_psychology",
+        social_issues                  = "facet_social",
+        futurism_speculative           = "facet_futurism",
+        sensory_experience             = "facet_sensory"
       )
-    })
+      active_input_id  <- facet_map[[active_cat]]
+      current_facet_val <- if (!is.null(active_input_id)) input[[active_input_id]] else "All"
+      
+      bubble_data <- map_dfr(terms, function(term) {
+        n_articles <- df_filtered %>%
+          filter(map_lgl(keywords, ~ term %in% .x)) %>%
+          nrow()
+        
+        tibble(
+          level         = 2L,
+          label         = term,
+          display_label = term,
+          article_count = n_articles,
+          category      = active_cat,
+          parent        = active_cat,
+          selected      = !is.null(current_facet_val) && current_facet_val == term
+        )
+      })
+    }
     
     r2d3(
       data       = bubble_data,
